@@ -16,6 +16,7 @@ import android.content.Intent;
 public class a extends Activity 
 {
     ListView list;
+    TtsSpeak tts;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -37,7 +38,7 @@ public class a extends Activity
             list=findViewById(R.id.aListView1);
            // Toast.makeText(getApplicationContext(),getSharedPreferences("language",MODE_PRIVATE ).getString("language",Locale.UK.toLanguageTag()),Toast.LENGTH_LONG).show();
             System.out.println(tool.getLanguage( getSharedPreferences("language",MODE_PRIVATE ).getString("language",Locale.UK.toLanguageTag())).toLanguageTag());
-            TtsSpeak tts=new TtsSpeak(getApplicationContext(),  tool.getLanguage( getSharedPreferences("language",MODE_PRIVATE ).getString("language",Locale.UK.toLanguageTag())));
+            tts=new TtsSpeak(getApplicationContext(),  tool.getLanguage( getSharedPreferences("language",MODE_PRIVATE ).getString("language",Locale.UK.toLanguageTag())));
             list.setAdapter(new listAdapter(chinese,english,getApplicationContext(),tts,english));
         }
         catch ( ArrayIndexOutOfBoundsException e)
@@ -45,8 +46,17 @@ public class a extends Activity
             
             Toast.makeText(getApplicationContext(),"文件异常",Toast.LENGTH_LONG).show();
         }
-
-        
-        
     }
+
+    @Override
+    protected void onDestroy()
+    {
+        
+        tts.shutdown();
+        
+        super.onDestroy();
+    }
+    
+    
+    
 }
